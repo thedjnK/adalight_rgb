@@ -1,0 +1,7 @@
+# STM32 Bluepill
+
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD_STM32_BLUEPILL
+	bool "STM32 Bluepill"
+	depends on SOC_STM32F103X8

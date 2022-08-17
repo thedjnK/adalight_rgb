@@ -1,0 +1,10 @@
+# STM32 Bluepill
+
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_STM32_BLUEPILL
+
+config BOARD
+	default "stm32_bluepill"
+
+endif # BOARD_STM32_BLUEPILL
