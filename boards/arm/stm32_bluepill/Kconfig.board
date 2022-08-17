@@ -1,5 +1,4 @@
 # STM32 Bluepill
-
 # SPDX-License-Identifier: Apache-2.0
 
 config BOARD_STM32_BLUEPILL
