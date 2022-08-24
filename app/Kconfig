@@ -1,0 +1,4 @@
+config USB_DEVICE_PID
+	default USB_PID_CDC_ACM_SAMPLE
+
+source "Kconfig.zephyr"
