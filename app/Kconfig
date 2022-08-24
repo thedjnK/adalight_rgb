@@ -1,4 +1,12 @@
+menu "Adalight RGB configuration"
+
 config USB_DEVICE_PID
 	default USB_PID_CDC_ACM_SAMPLE
+
+module = ADALIGHT_RGB
+module-str = ADALIGHT_RGB
+source "subsys/logging/Kconfig.template.log_config"
+
+endmenu
 
 source "Kconfig.zephyr"
