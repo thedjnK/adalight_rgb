@@ -39,6 +39,7 @@
 	aliases {
 		led0 = &led;
 		sw0 = &user_button;
+		usb-cdc = &cdc_acm_uart;
 	};
 };
 
