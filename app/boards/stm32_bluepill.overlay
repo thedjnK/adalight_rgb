@@ -1,0 +1,31 @@
+/*
+ * Copyright (c) 2022, thedjnK
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+#include <dt-bindings/led/led.h>
+
+&spi2 {
+	led_strip: ws2812@0 {
+		compatible = "worldsemi,ws2812-spi";
+		label = "WS2812";
+		reg = <0>;
+		spi-max-frequency = <4000000>;
+
+		/* WS2812 */
+		chain-length = <42>;
+		spi-one-frame = <0x70>;
+		spi-zero-frame = <0x40>;
+		reset-delay = <50>;
+
+		color-mapping = <LED_COLOR_ID_GREEN
+				 LED_COLOR_ID_RED
+				 LED_COLOR_ID_BLUE>;
+	};
+};
+
+/ {
+	aliases {
+		led-strip = &led_strip;
+	};
+};

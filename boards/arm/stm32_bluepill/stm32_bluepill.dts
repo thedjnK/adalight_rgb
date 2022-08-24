@@ -8,7 +8,6 @@
 /dts-v1/;
 #include <st/f1/stm32f103X8.dtsi>
 #include <st/f1/stm32f103r(8-b)tx-pinctrl.dtsi>
-#include <dt-bindings/led/led.h>
 
 / {
 	model = "STM32 Bluepill";
@@ -40,7 +39,6 @@
 	aliases {
 		led0 = &led;
 		sw0 = &user_button;
-		led-strip = &led_strip;
 	};
 };
 
@@ -103,23 +101,6 @@
 	pinctrl-0 = <&spi2_nss_master_pb12 &spi2_sck_master_pb13
 		     &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
 	status = "okay";
-
-	led_strip: ws2812@0 {
-		compatible = "worldsemi,ws2812-spi";
-		label = "WS2812";
-		reg = <0>;
-		spi-max-frequency = <4000000>;
-
-		/* WS2812 */
-		chain-length = <42>;
-		spi-one-frame = <0x70>;
-		spi-zero-frame = <0x40>;
-		reset-delay = <50>;
-
-		color-mapping = <LED_COLOR_ID_GREEN
-				 LED_COLOR_ID_RED
-				 LED_COLOR_ID_BLUE>;
-	};
 };
 
 &timers1 {
