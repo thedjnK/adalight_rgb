@@ -27,9 +27,33 @@ Then download all the required libraries and modules using:
 
     west update
 
-## Building
+## Configuring (for custom boards not supported in-tree)
 
 todo
+
+## Building
+
+### MCUboot
+
+MCUboot is used as the bootloader for this project to allow for updating the code on devices without needing an external SWD/JTAG programmer by holding a GPIO at a specific level when powering the board up. The board firmware can then be updated via serial port/USB CDC using mcumgr.
+
+To build MCUboot:
+
+todo
+
+### Adalight RGB
+
+todo
+
+## Circuit
+
+### stm32_bluepill
+
+todo
+
+## Zephyr version
+
+This code targets Zephyr RTOS 2.7 (LTS)
 
 ## License
 
