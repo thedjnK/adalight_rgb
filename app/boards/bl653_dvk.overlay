@@ -1,0 +1,47 @@
+/*
+ * Copyright (c) 2019, Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+#include <dt-bindings/led/led.h>
+
+/*
+ * At 4 MHz, 1 bit is 250 ns, so 3 bits is 750 ns.
+ *
+ * That's cutting it a bit close to the edge of the timing parameters,
+ * but it seems to work on AdaFruit LED rings.
+ */
+#define SPI_FREQ    4000000
+#define ZERO_FRAME  0x40
+#define ONE_FRAME   0x70
+
+&spi1 {
+	compatible = "nordic,nrf-spim";
+	led_strip: ws2812@0 {
+		compatible = "worldsemi,ws2812-spi";
+		label = "WS2812";
+		reg = <0>;
+		spi-max-frequency = <SPI_FREQ>;
+
+		/* WS2812 */
+		chain-length = <32>;
+		color-mapping = <LED_COLOR_ID_GREEN
+				 LED_COLOR_ID_RED
+				 LED_COLOR_ID_BLUE>;
+		spi-one-frame = <ONE_FRAME>;
+		spi-zero-frame = <ZERO_FRAME>;
+	};
+};
+
+&usbd {
+        cdc_acm_uart: cdc_acm_uart {
+                compatible = "zephyr,cdc-acm-uart";
+                label = "CDC_ACM_0";
+        };
+};
+
+/ {
+	aliases {
+		led-strip = &led_strip;
+	};
+};
