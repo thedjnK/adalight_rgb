@@ -53,7 +53,7 @@ todo
 
 ## Zephyr version
 
-This code targets Zephyr RTOS 2.7 (LTS)
+This code targets Zephyr RTOS 3.5
 
 ## License
 
