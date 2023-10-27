@@ -1,7 +1,7 @@
 menu "Adalight RGB configuration"
 
 config USB_DEVICE_PID
-	default USB_PID_CDC_ACM_SAMPLE
+	default 0x0001
 
 module = ADALIGHT_RGB
 module-str = ADALIGHT_RGB

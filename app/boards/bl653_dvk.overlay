@@ -20,7 +20,6 @@
 	compatible = "nordic,nrf-spim";
 	led_strip: ws2812@0 {
 		compatible = "worldsemi,ws2812-spi";
-		label = "WS2812";
 		reg = <0>;
 		spi-max-frequency = <SPI_FREQ>;
 
@@ -37,13 +36,12 @@
 &usbd {
         cdc_acm_uart: cdc_acm_uart {
                 compatible = "zephyr,cdc-acm-uart";
-                label = "CDC_ACM_0";
         };
 };
 
 / {
 	aliases {
 		led-strip = &led_strip;
-		usb-cdc = &bl653_cdc_acm_uart;
+		usb-cdc = &cdc_acm_uart;
 	};
 };

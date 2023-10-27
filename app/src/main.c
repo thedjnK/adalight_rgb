@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <stdio.h>
 #include <string.h>
-#include <device.h>
-#include <sys/ring_buffer.h>
-#include <drivers/uart.h>
-#include <drivers/led_strip.h>
-#include <usb/usb_device.h>
-#include <logging/log.h>
+#include <zephyr/device.h>
+#include <zephyr/sys/ring_buffer.h>
+#include <zephyr/drivers/uart.h>
+#include <zephyr/drivers/led_strip.h>
+#include <zephyr/usb/usb_device.h>
+#include <zephyr/logging/log.h>
 
 LOG_MODULE_REGISTER(adalight_rgb, CONFIG_ADALIGHT_RGB_LOG_LEVEL);
 
@@ -67,6 +67,7 @@ static void interrupt_handler(const struct device *dev, void *user_data)
 				/* Check received data and search for 'Ada' header */
 				rb_len = ring_buf_peek(&ringbuf, buffer, sizeof(buffer));
 
+
 				while (i < rb_len && (buffer[i] != 'A' || buffer[i+1] != 'd' || buffer[i+2] != 'a')) {
 					++i;
 				}
@@ -87,7 +88,9 @@ static void interrupt_handler(const struct device *dev, void *user_data)
 					rb_len = ring_buf_get(&ringbuf, buffer, sizeof(buffer));
 
 					/* We have the required data */
-					memset(&pixels, 0x00, (sizeof(pixels) / sizeof(pixels[0]) * led_count));
+//					memset(&pixels, 0x00, (sizeof(pixels) / sizeof(pixels[0]) * led_count));
+//					memset(&pixels, 0x00, (sizeof(pixels) / sizeof(pixels[0])));
+					memset(&pixels, 0x00, sizeof(pixels));
 
 					/* Move to start of data */
 					i += HEADER_SIZE;
@@ -110,6 +113,7 @@ static void interrupt_handler(const struct device *dev, void *user_data)
 				} else {
 					if (buffer[i] == 'A' && buffer[i+1] == 'd' && buffer[i+2] == 'a' && buffer[i+5] != (buffer[i+3] ^ buffer[i+4] ^ 0x55)) {
 						LOG_ERR("Invalid checksum: %02x, expected: %02x", buffer[i+5], (buffer[i+3] ^ buffer[i+4] ^ 0x55));
+						rb_len = ring_buf_get(&ringbuf, buffer, 3);
 					} else {
 						LOG_ERR("Invalid data: %02x%02x%02x", buffer[i], buffer[i+1], buffer[i+2]);
 					}
@@ -119,21 +123,21 @@ static void interrupt_handler(const struct device *dev, void *user_data)
 	}
 }
 
-void main(void)
+int main(void)
 {
 	int ret;
 	const struct device *usb_cdc = DEVICE_DT_GET(USB_CDC_NODE);
 
 	if (!device_is_ready(usb_cdc)) {
 		LOG_ERR("CDC ACM device is not ready");
-		return;
+		return 0;
 	}
 
 	ret = usb_enable(NULL);
 
 	if (ret != 0) {
 		LOG_ERR("Failed to enable USB");
-		return;
+		return 0;
 	}
 
 	ring_buf_init(&ringbuf, sizeof(ring_buffer), ring_buffer);
@@ -143,4 +147,6 @@ void main(void)
 
 	uart_irq_callback_set(usb_cdc, interrupt_handler);
 	uart_irq_rx_enable(usb_cdc);
+
+	return 0;
 }

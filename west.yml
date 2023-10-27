@@ -6,7 +6,7 @@ manifest:
   projects:
     - name: zephyr
       remote: zephyr
-      revision: v2.7-branch
+      revision: v3.5-branch
       import:
         name-allowlist:
           - cmsis
@@ -15,8 +15,8 @@ manifest:
           - mbedtls
           - mcuboot
           - mcumgr
-          - tinycbor
           - tinycrypt
+          - zcbor
 
   self:
     path: adalight_rgb
