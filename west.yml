@@ -14,7 +14,6 @@ manifest:
           - hal_stm32
           - mbedtls
           - mcuboot
-          - mcumgr
           - tinycrypt
           - zcbor
 
