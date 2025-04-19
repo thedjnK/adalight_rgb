@@ -25,7 +25,8 @@ LOG_MODULE_REGISTER(adalight_rgb, CONFIG_ADALIGHT_RGB_LOG_LEVEL);
 
 /* 3 bytes per LED, 6 bytes header, allow enough for 6 messages in ring buffer and 2 messages for processing */
 #define HEADER_SIZE 6
-#define BUFFER_SIZE ((3 * LED_STRIP_PIXELS) + HEADER_SIZE)
+#define COLOURS_PER_LED 3
+#define BUFFER_SIZE ((COLOURS_PER_LED * LED_STRIP_PIXELS) + HEADER_SIZE)
 #define RING_BUF_SIZE (BUFFER_SIZE * 6)
 #define DATA_BUF_SIZE (BUFFER_SIZE * 2)
 
@@ -80,6 +81,11 @@ static void interrupt_handler(const struct device *dev, void *user_data)
 				if (buffer[i] == 'A' && buffer[i+1] == 'd' && buffer[i+2] == 'a' && buffer[i+5] == (buffer[i+3] ^ buffer[i+4] ^ 0x55)) {
 					/* Received valid header, check for number of LEDs */
 					uint16_t led_count = ((((uint16_t)buffer[i+3]) << 8) | (uint16_t)buffer[i+4]) + 1;
+
+					if ((rb_len - i) < (led_count * COLOURS_PER_LED) + HEADER_SIZE) {
+						/* Need next USB message for full LED data */
+						continue;
+					}
 
 					if (led_count > LED_STRIP_PIXELS) {
 						led_count = LED_STRIP_PIXELS;
